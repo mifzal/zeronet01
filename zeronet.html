@@ -1,0 +1,830 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mifzal Eko Nugroho — Penetration Tester & Security Researcher</title>
+<meta name="description" content="Portofolio Mifzal Eko Nugroho: penetration tester, red teamer, dan peneliti keamanan.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#05090b; --bg2:#080e11; --panel:#0b1215;
+  --line:#1a2a23; --line-hi:#2e4a3b;
+  --txt:#c9d6cf; --dim:#6e8078;
+  --green:#5cf59a; --green-dim:#2f7a52;
+  --amber:#ffc36b; --red:#ff5648;
+  --disp:'Unbounded',sans-serif; --body:'Space Grotesk',sans-serif; --mono:'JetBrains Mono',monospace;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--txt);font-family:var(--body);font-size:17px;line-height:1.65;overflow-x:hidden}
+::selection{background:var(--green);color:#04110a}
+::-webkit-scrollbar{width:10px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--line-hi);border:2px solid var(--bg)}
+::-webkit-scrollbar-thumb:hover{background:var(--green-dim)}
+a{color:inherit;text-decoration:none}
+img{display:block;max-width:100%}
+.mono{font-family:var(--mono)}
+.container{width:min(1240px,92vw);margin-inline:auto}
+
+/* ===== overlay global: noise + scanline ===== */
+.noise{position:fixed;inset:-100px;pointer-events:none;z-index:60;opacity:.05;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:grain 1.2s steps(6) infinite}
+@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-30px,18px)}40%{transform:translate(22px,-26px)}60%{transform:translate(-14px,-30px)}80%{transform:translate(30px,22px)}100%{transform:translate(0,0)}}
+.scanlines{position:fixed;inset:0;pointer-events:none;z-index:61;opacity:.16;
+  background:repeating-linear-gradient(0deg,transparent 0 3px,rgba(0,0,0,.5) 3px 4px)}
+
+/* ===== boot overlay ===== */
+#boot{position:fixed;inset:0;background:#030607;z-index:200;display:flex;align-items:center;justify-content:center;transition:opacity .5s ease,visibility .5s}
+#boot.done{opacity:0;visibility:hidden}
+#boot pre{font-family:var(--mono);font-size:13px;color:var(--green);line-height:2;white-space:pre-wrap;max-width:90vw}
+#boot .ok{color:var(--green)} #boot .warn{color:var(--amber)}
+
+/* ===== kursor custom ===== */
+#xhair{position:fixed;top:0;left:0;z-index:150;pointer-events:none;width:34px;height:34px;transform:translate(-50%,-50%);mix-blend-mode:screen;transition:width .2s,height .2s}
+#xhair::before,#xhair::after{content:'';position:absolute;background:var(--green)}
+#xhair::before{left:50%;top:0;width:1px;height:100%;transform:translateX(-.5px)}
+#xhair::after{top:50%;left:0;height:1px;width:100%;transform:translateY(-.5px)}
+#xhair .ring{position:absolute;inset:6px;border:1px solid rgba(92,245,154,.55)}
+#xcoords{position:fixed;z-index:150;pointer-events:none;font-family:var(--mono);font-size:10px;color:var(--green-dim);letter-spacing:.08em}
+body.hov #xhair{width:56px;height:56px}
+@media (pointer:coarse){#xhair,#xcoords{display:none}}
+
+/* ===== progress + nav ===== */
+#progress{position:fixed;top:0;left:0;height:2px;background:var(--green);width:0;z-index:120;box-shadow:0 0 12px rgba(92,245,154,.8)}
+nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(5,9,11,.86);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.nav-in{display:flex;align-items:center;gap:28px;height:60px}
+.brand{font-family:var(--disp);font-weight:900;font-size:15px;letter-spacing:.06em;color:#fff;white-space:nowrap}
+.brand em{font-style:normal;color:var(--green)}
+.nav-links{display:flex;gap:4px;margin-left:auto;overflow-x:auto;scrollbar-width:none}
+.nav-links::-webkit-scrollbar{display:none}
+.nav-links a{font-family:var(--mono);font-size:11px;letter-spacing:.12em;color:var(--dim);padding:8px 10px;white-space:nowrap;transition:color .2s,background .2s}
+.nav-links a b{color:var(--green-dim);font-weight:500;margin-right:4px}
+.nav-links a:hover,.nav-links a.active{color:var(--green);background:rgba(92,245,154,.06)}
+#clock{font-family:var(--mono);font-size:11px;color:var(--green);letter-spacing:.1em;white-space:nowrap}
+#clock i{font-style:normal;animation:blink 1s steps(2) infinite}
+@keyframes blink{50%{opacity:0}}
+
+/* ===== HERO ===== */
+#hero{position:relative;min-height:100vh;display:flex;align-items:flex-end;overflow:hidden;border-bottom:1px solid var(--line)}
+#gl{position:absolute;inset:0;width:100%;height:100%}
+.hero-grid{position:absolute;inset:0;pointer-events:none;
+  background-image:linear-gradient(rgba(92,245,154,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(92,245,154,.05) 1px,transparent 1px);
+  background-size:64px 64px;
+  mask-image:radial-gradient(ellipse 90% 80% at 60% 45%,#000 30%,transparent 75%)}
+.hero-inner{position:relative;z-index:5;padding:120px 0 64px;width:100%}
+.hero-kick{font-size:13px;color:var(--green);letter-spacing:.06em;margin-bottom:22px}
+.hero-kick span{color:var(--dim)}
+h1{font-family:var(--disp);font-weight:900;color:#fff;line-height:.98;font-size:clamp(2.4rem,7.6vw,6.2rem);letter-spacing:-.01em;text-transform:uppercase}
+h1 .indent{display:block;padding-left:clamp(24px,7vw,110px)}
+h1 .blk{color:var(--green);animation:blink 1.1s steps(2) infinite;font-weight:500}
+.hero-role{margin-top:22px;font-size:clamp(1rem,2vw,1.3rem);color:var(--dim);font-weight:500}
+.hero-role span{color:var(--green);padding:0 6px}
+.hero-cols{display:flex;gap:48px;align-items:flex-end;margin-top:44px;flex-wrap:wrap}
+.term{width:min(600px,100%);border:1px solid var(--line-hi);background:rgba(6,12,10,.82);backdrop-filter:blur(3px)}
+.term-bar{display:flex;align-items:center;gap:8px;padding:9px 14px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:11px;color:var(--dim)}
+.term-bar i{width:8px;height:8px;background:var(--green-dim)}
+.term-bar i:nth-child(2){background:var(--amber);opacity:.7}
+.term-bar i:nth-child(3){background:var(--red);opacity:.55}
+.term-bar span{margin-left:8px}
+.term-body{padding:16px 18px;font-family:var(--mono);font-size:13px;line-height:1.9;min-height:196px;color:var(--txt)}
+.term-body .cmd{color:#fff}.term-body .cmd::before{content:'$ ';color:var(--green)}
+.term-body .out{color:var(--green-dim)}
+.term-body .out.hot{color:var(--amber)}
+.hero-side{font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--dim);display:grid;gap:8px}
+.hero-side b{color:var(--green);font-weight:500}
+.hero-strip{position:relative;z-index:5;border-top:1px solid var(--line);font-family:var(--mono);font-size:11px;letter-spacing:.14em;color:var(--dim);display:flex;flex-wrap:wrap;gap:8px 34px;padding:14px 0}
+.hero-strip b{color:var(--green);font-weight:500}
+.scroll-cue{margin-left:auto;color:var(--green);animation:blink 1.6s steps(2) infinite}
+
+/* ===== marquee ===== */
+.marquee{border-bottom:1px solid var(--line);overflow:hidden;background:var(--bg2)}
+.marquee-track{display:flex;width:max-content;animation:mq 26s linear infinite}
+.marquee:hover .marquee-track{animation-play-state:paused}
+.marquee-track span{font-family:var(--mono);font-size:12px;letter-spacing:.22em;color:var(--dim);padding:13px 0;white-space:nowrap}
+.marquee-track span b{color:var(--green);font-weight:500;padding:0 18px}
+@keyframes mq{to{transform:translateX(-50%)}}
+
+/* ===== section umum ===== */
+section{padding:110px 0;position:relative}
+.sec-head{display:flex;align-items:baseline;gap:20px;border-top:1px solid var(--line);padding-top:18px;margin-bottom:56px;flex-wrap:wrap}
+.sec-no{font-family:var(--mono);font-size:12px;color:var(--green);letter-spacing:.2em}
+.sec-head h2{font-family:var(--disp);font-weight:700;color:#fff;font-size:clamp(1.5rem,3.6vw,2.6rem);text-transform:uppercase;letter-spacing:.01em}
+.sec-note{margin-left:auto;font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.12em}
+[data-reveal]{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease;transition-delay:var(--d,0s)}
+[data-reveal].in{opacity:1;transform:none}
+
+/* ===== PROFIL (sticky 2 kolom) ===== */
+.profil-grid{display:grid;grid-template-columns:380px 1fr;gap:64px;align-items:start}
+.profil-sticky{position:sticky;top:96px}
+.idcard{border:1px solid var(--line-hi);background:var(--panel);position:relative}
+.idcard .photo{position:relative;overflow:hidden;border-bottom:1px solid var(--line)}
+.idcard .photo img{filter:grayscale(1) contrast(1.12) brightness(.92);width:100%;height:400px;object-fit:cover}
+.idcard .photo::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(92,245,154,.09),transparent 45%,rgba(5,9,11,.55));mix-blend-mode:screen}
+.idcard .scan{position:absolute;left:0;right:0;top:-60px;height:56px;background:linear-gradient(180deg,transparent,rgba(92,245,154,.28),transparent);animation:scanmove 3.4s linear infinite}
+@keyframes scanmove{to{top:110%}}
+.idcard .rows{padding:18px 20px;font-family:var(--mono);font-size:12px;display:grid;gap:9px;letter-spacing:.06em}
+.idcard .rows div{display:flex;justify-content:space-between;gap:14px;border-bottom:1px dashed var(--line);padding-bottom:8px}
+.idcard .rows dt{color:var(--dim)} .idcard .rows dd{color:var(--green);text-align:right}
+.stamp{position:absolute;top:14px;right:14px;font-family:var(--mono);font-size:10px;letter-spacing:.24em;color:var(--red);border:1px solid var(--red);padding:5px 10px;transform:rotate(6deg);background:rgba(5,9,11,.7);z-index:2}
+.profil-body p{color:var(--txt);max-width:62ch;margin-bottom:22px;font-size:1.05rem}
+.profil-body p b{color:#fff;font-weight:600}
+.profil-body .quote{border-left:2px solid var(--green);padding:6px 0 6px 22px;color:var(--green);font-family:var(--mono);font-size:14px;margin:34px 0;letter-spacing:.02em}
+.stat-strip{display:flex;flex-wrap:wrap;border:1px solid var(--line);margin-top:44px}
+.stat{flex:1 1 160px;padding:22px 24px;border-right:1px solid var(--line)}
+.stat:last-child{border-right:0}
+.stat .num{font-family:var(--disp);font-weight:700;font-size:2.1rem;color:var(--green);line-height:1}
+.stat .lbl{font-family:var(--mono);font-size:10px;letter-spacing:.18em;color:var(--dim);margin-top:10px}
+
+/* ===== SPESIALISASI (baris vektor) ===== */
+#vektor{background:var(--bg2);border-block:1px solid var(--line)}
+.vec-list{list-style:none;border-top:1px solid var(--line)}
+.vec{display:grid;grid-template-columns:90px 1fr auto 40px;gap:24px;align-items:center;padding:30px 10px;border-bottom:1px solid var(--line);cursor:crosshair;transition:background .25s,padding .25s;position:relative}
+.vec:hover{background:rgba(92,245,154,.045);padding-left:24px}
+.vec:hover::before{content:'';position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--green)}
+.vec-idx{font-family:var(--mono);color:var(--green-dim);font-size:13px;letter-spacing:.1em}
+.vec h3{font-family:var(--disp);font-weight:700;font-size:clamp(1.05rem,2.2vw,1.5rem);color:#fff;text-transform:uppercase}
+.vec-desc{color:var(--dim);font-size:.95rem;max-height:0;overflow:hidden;opacity:0;transition:max-height .4s ease,opacity .4s ease,margin .4s;max-width:56ch}
+.vec:hover .vec-desc{max-height:120px;opacity:1;margin-top:8px}
+.vec-tags{font-family:var(--mono);font-size:11px;color:var(--green-dim);letter-spacing:.1em;text-align:right;max-width:280px}
+.vec-arrow{color:var(--green);font-size:18px;transition:transform .25s}
+.vec:hover .vec-arrow{transform:translateX(8px)}
+
+/* ===== OPERASI (case files) ===== */
+.ops-grid{display:grid;grid-template-columns:repeat(12,1fr);gap:22px}
+.op{border:1px solid var(--line);background:var(--panel);padding:28px;position:relative;overflow:hidden;transition:border-color .3s,transform .3s}
+.op:hover{border-color:var(--green-dim);transform:translateY(-4px)}
+.op::after{content:'';position:absolute;left:0;right:0;top:-70px;height:60px;background:linear-gradient(180deg,transparent,rgba(92,245,154,.16),transparent);opacity:0;transition:opacity .2s}
+.op:hover::after{opacity:1;animation:scanmove 1.4s linear infinite}
+.op.s7{grid-column:span 7}.op.s5{grid-column:span 5}.op.s6{grid-column:span 6}
+.op-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.op-code{font-family:var(--mono);font-size:12px;color:var(--green);letter-spacing:.2em}
+.op-stamp{font-family:var(--mono);font-size:9px;letter-spacing:.22em;border:1px solid var(--line-hi);color:var(--dim);padding:4px 9px;transition:all .3s}
+.op:hover .op-stamp{color:var(--green);border-color:var(--green-dim);transform:rotate(-3deg)}
+.op h3{font-family:var(--disp);font-weight:700;color:#fff;font-size:1.35rem;text-transform:uppercase;margin-bottom:10px}
+.op h3 small{display:block;font-family:var(--mono);font-weight:400;font-size:11px;color:var(--amber);letter-spacing:.14em;margin-top:6px;text-transform:none}
+.op p{color:var(--dim);font-size:.95rem;margin-bottom:20px}
+.op-meta{font-family:var(--mono);font-size:11px;border-top:1px dashed var(--line);padding-top:14px;display:grid;gap:6px}
+.op-meta div{display:flex;justify-content:space-between;gap:16px}
+.op-meta dt{color:var(--dim)} .op-meta dd{color:var(--txt)}
+.op-meta dd.hot{color:var(--red)} .op-meta dd.win{color:var(--green)}
+
+/* ===== ARSENAL ===== */
+#arsenal{background:var(--bg2);border-block:1px solid var(--line)}
+.ars-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:64px}
+.bar-row{margin-bottom:26px}
+.bar-row .lbl{display:flex;justify-content:space-between;font-family:var(--mono);font-size:12px;letter-spacing:.1em;margin-bottom:9px}
+.bar-row .lbl b{color:#fff;font-weight:500}.bar-row .lbl span{color:var(--green)}
+.bar{height:8px;background:#0e171a;border:1px solid var(--line);position:relative}
+.bar i{position:absolute;inset:1px;width:0;background:repeating-linear-gradient(90deg,var(--green) 0 6px,transparent 6px 9px);transition:width 1.4s cubic-bezier(.22,1,.36,1)}
+.loadout h3{font-family:var(--mono);font-size:12px;color:var(--amber);letter-spacing:.2em;margin:26px 0 10px}
+.loadout h3:first-child{margin-top:0}
+.loadout p{font-family:var(--mono);font-size:13px;color:var(--dim);line-height:2}
+.loadout p b{color:var(--txt);font-weight:400}
+.loadout p b:hover{color:var(--green)}
+
+/* ===== LOG KARIER + SERTIFIKASI ===== */
+.tl{border-left:1px solid var(--line-hi);margin-left:8px}
+.tl-item{position:relative;padding:0 0 46px 38px}
+.tl-item::before{content:'';position:absolute;left:-5px;top:7px;width:9px;height:9px;background:var(--bg);border:2px solid var(--green)}
+.tl-item:last-child{padding-bottom:0}
+.tl-when{font-family:var(--mono);font-size:11px;color:var(--green);letter-spacing:.18em}
+.tl-item h3{font-family:var(--disp);font-weight:700;color:#fff;font-size:1.2rem;margin:8px 0 4px;text-transform:uppercase}
+.tl-item h4{font-family:var(--mono);font-weight:400;font-size:12px;color:var(--amber);letter-spacing:.1em;margin-bottom:10px}
+.tl-item p{color:var(--dim);max-width:60ch}
+.certs{margin-top:70px;border-top:1px solid var(--line)}
+.cert{display:grid;grid-template-columns:120px 1fr auto auto;gap:20px;align-items:center;padding:18px 8px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:13px;transition:background .2s,padding .2s;cursor:crosshair}
+.cert:hover{background:rgba(92,245,154,.05);padding-left:20px}
+.cert .cid{color:var(--green);letter-spacing:.1em;font-weight:700}
+.cert .cname{color:#fff;font-family:var(--body)}
+.cert .ciss,.cert .cyr{color:var(--dim);font-size:11px;letter-spacing:.1em}
+.cert .cstat{color:var(--green);font-size:11px}
+
+/* ===== KANAL / KONTAK ===== */
+#kanal{border-top:1px solid var(--line)}
+.kanal-grid{display:grid;grid-template-columns:1fr 1fr;gap:70px;align-items:start}
+.kanal-left h2{font-family:var(--disp);font-weight:900;color:#fff;font-size:clamp(2rem,4.6vw,3.6rem);line-height:1.05;text-transform:uppercase}
+.kanal-left h2 em{font-style:normal;color:var(--green)}
+.kanal-left p{color:var(--dim);margin:24px 0 36px;max-width:46ch}
+.ch-list{border-top:1px solid var(--line)}
+.ch{display:flex;justify-content:space-between;gap:16px;padding:15px 6px;border-bottom:1px solid var(--line);font-family:var(--mono);font-size:13px;transition:background .2s,padding .2s}
+.ch:hover{background:rgba(92,245,154,.05);padding-left:16px}
+.ch dt{color:var(--dim);letter-spacing:.12em}
+.ch dd{color:var(--green)}
+form.term-form{border:1px solid var(--line-hi);background:var(--panel)}
+.term-form .term-body{min-height:0}
+.f-row{margin-bottom:20px}
+.f-row label{display:block;font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.18em;margin-bottom:8px}
+.f-row input,.f-row textarea{width:100%;background:#070d0f;border:1px solid var(--line);color:var(--txt);font-family:var(--mono);font-size:14px;padding:12px 14px;outline:none;transition:border-color .2s,box-shadow .2s;resize:vertical}
+.f-row input:focus,.f-row textarea:focus{border-color:var(--green);box-shadow:0 0 0 1px rgba(92,245,154,.35)}
+.btn{display:inline-flex;align-items:center;gap:10px;background:var(--green);color:#04110a;border:none;font-family:var(--mono);font-weight:700;font-size:13px;letter-spacing:.16em;padding:15px 28px;cursor:pointer;transition:transform .15s,box-shadow .2s}
+.btn:hover{transform:translate(-2px,-2px);box-shadow:4px 4px 0 var(--green-dim)}
+#form-ok{display:none;font-family:var(--mono);font-size:13px;color:var(--green);line-height:2.1;padding:8px 0}
+
+/* ===== FOOTER ===== */
+footer{border-top:1px solid var(--line);padding:44px 0;background:var(--bg2)}
+.foot{display:flex;flex-wrap:wrap;gap:14px 40px;justify-content:space-between;font-family:var(--mono);font-size:11px;color:var(--dim);letter-spacing:.1em;line-height:2}
+.foot .fp{color:var(--green-dim)}
+.foot b{color:var(--green);font-weight:500}
+
+/* ===== responsif ===== */
+@media(max-width:980px){
+  .profil-grid,.ars-grid,.kanal-grid{grid-template-columns:1fr}
+  .profil-sticky{position:static}
+  .op.s7,.op.s5,.op.s6{grid-column:span 12}
+  .vec{grid-template-columns:44px 1fr;gap:14px}
+  .vec-tags{grid-column:2;text-align:left;max-width:none}
+  .vec-arrow{display:none}
+  .vec-desc{max-height:none;opacity:1;margin-top:6px}
+  .cert{grid-template-columns:90px 1fr;grid-auto-flow:row}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation-duration:.001s!important;animation-iteration-count:1!important;transition-duration:.001s!important}
+  .marquee-track{animation:none}
+  [data-reveal]{opacity:1;transform:none}
+  #xhair,#xcoords{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="noise" aria-hidden="true"></div>
+<div class="scanlines" aria-hidden="true"></div>
+<div id="progress" aria-hidden="true"></div>
+<div id="xhair" aria-hidden="true"><span class="ring"></span></div>
+<div id="xcoords" aria-hidden="true"></div>
+
+<!-- BOOT -->
+<div id="boot" aria-hidden="true"><pre id="boot-text"></pre></div>
+
+<!-- NAV -->
+<nav>
+  <div class="container nav-in">
+    <a class="brand" href="#hero">M.E.N<em>_</em>SYS</a>
+    <div class="nav-links">
+      <a href="#profil"><b>01</b>PROFIL</a>
+      <a href="#vektor"><b>02</b>VEKTOR</a>
+      <a href="#operasi"><b>03</b>OPERASI</a>
+      <a href="#arsenal"><b>04</b>ARSENAL</a>
+      <a href="#log"><b>05</b>LOG</a>
+      <a href="#kanal"><b>06</b>KANAL</a>
+    </div>
+    <div id="clock">--:--:-- WIB <i>▮</i></div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <canvas id="gl" aria-hidden="true"></canvas>
+  <div class="hero-grid" aria-hidden="true"></div>
+  <div class="container hero-inner">
+    <p class="hero-kick mono">[root@nusantara ~]# <span>id -u</span> → 0</p>
+    <h1>
+      <span data-scramble data-text="MIFZAL EKO">MIFZAL EKO</span><br>
+      <span class="indent"><span data-scramble data-text="NUGROHO">NUGROHO</span> <span class="blk">▮</span></span>
+    </h1>
+    <p class="hero-role">Penetration Tester <span>//</span> Security Researcher <span>//</span> Peretas Etis</p>
+    <div class="hero-cols">
+      <div class="term">
+        <div class="term-bar"><i></i><i></i><i></i><span>tty1 — sesi-aman</span></div>
+        <div class="term-body" id="term"></div>
+      </div>
+      <div class="hero-side">
+        <span>STATUS &nbsp;&nbsp;: <b>AVAILABLE FOR OPS</b></span>
+        <span>LOKASI &nbsp;&nbsp;: YOGYAKARTA, ID</span>
+        <span>MODE &nbsp;&nbsp;&nbsp;&nbsp;: <b>OFFENSIVE SECURITY</b></span>
+        <span>CLEARANCE: ██ ██████████</span>
+      </div>
+    </div>
+  </div>
+  <div class="container hero-strip">
+    <span>KANAL: <b>TERENKRIPSI</b></span>
+    <span>PROTOKOL: <b>TLS 1.3</b></span>
+    <span>UPTIME: <b>99.98%</b></span>
+    <span>ANCAMAN DIMONITOR: <b id="threat-count">1.204</b></span>
+    <span class="scroll-cue">GULIR UNTUK MEMINDAI ▼</span>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track" id="mq"></div>
+</div>
+
+<!-- SEC 01 PROFIL -->
+<section id="profil">
+  <div class="container">
+    <header class="sec-head" data-reveal>
+      <span class="sec-no">SEC.01 //</span>
+      <h2 data-scramble>SUBJEK: M.E. NUGROHO</h2>
+      <span class="sec-note">dossier terbuka</span>
+    </header>
+    <div class="profil-grid">
+      <div class="profil-sticky" data-reveal>
+        <figure class="idcard">
+          <span class="stamp">VERIFIED</span>
+          <div class="photo">
+            <img src="https://picsum.photos/seed/mifzal-security-operator/600/760" alt="Foto Mifzal Eko Nugroho">
+            <span class="scan" aria-hidden="true"></span>
+          </div>
+          <div class="rows">
+            <div><dt>ID</dt><dd>MEN-2026-ID</dd></div>
+            <div><dt>NAMA</dt><dd>MIFZAL EKO NUGROHO</dd></div>
+            <div><dt>FUNGSI</dt><dd>OFFENSIVE SECURITY</dd></div>
+            <div><dt>BASIS</dt><dd>YOGYAKARTA −7.7956°, 110.3695°</dd></div>
+            <div><dt>STATUS</dt><dd style="color:var(--green)">● AKTIF</dd></div>
+          </div>
+        </figure>
+      </div>
+      <div class="profil-body">
+        <p data-reveal>Enam tahun terakhir saya habiskan untuk <b>masuk ke tempat yang seharusnya tak bisa dimasuki siapa pun</b> — secara legal, dengan surat izin tertulis, dan diakhiri laporan setebal novel.</p>
+        <p data-reveal style="--d:.1s">Saya percaya pertahanan terbaik diuji oleh penyerang yang sungguhan. Karena itu pekerjaan saya sederhana: berpikir seperti adversary, bergerak seperti adversary, lalu <b>menyerahkan peta lengkap cara menjebol sistemmu sebelum orang lain yang melakukannya</b>.</p>
+        <p data-reveal style="--d:.15s">Fokus saya di web application security, serangan Active Directory, dan red teaming. Di luar jam kerja: main CTF, nulis writeup, dan mengejar bug bounty — bukan demi papan peringkat, tapi karena setiap celah baru adalah puzzle yang belum pernah saya pecahkan.</p>
+        <blockquote class="quote" data-reveal style="--d:.2s">&gt; "Asumsi adalah celah keamanan yang tidak pernah kamu patch."</blockquote>
+        <div class="stat-strip" data-reveal style="--d:.25s">
+          <div class="stat"><div class="num" data-val="6" data-suffix="">0</div><div class="lbl">TAHUN BEROPERASI</div></div>
+          <div class="stat"><div class="num" data-val="48" data-suffix="+">0</div><div class="lbl">OPERASI SELESAI</div></div>
+          <div class="stat"><div class="num" data-val="27" data-suffix="">0</div><div class="lbl">CELAH KRITIS DILAPORKAN</div></div>
+          <div class="stat"><div class="num" data-val="15" data-suffix="">0</div><div class="lbl">FINAL CTF</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SEC 02 VEKTOR -->
+<section id="vektor">
+  <div class="container">
+    <header class="sec-head" data-reveal>
+      <span class="sec-no">SEC.02 //</span>
+      <h2 data-scramble>VEKTOR SERANGAN</h2>
+      <span class="sec-note">6 disiplin · 1 obsesi</span>
+    </header>
+    <ul class="vec-list">
+      <li class="vec" data-reveal>
+        <span class="vec-idx">V-01</span>
+        <div><h3>Web Application Pentest</h3><p class="vec-desc">Membedah aplikasi web lapis demi lapis — dari auth yang bolong sampai logika bisnis yang bisa dipelintir jadi mesin pencetak uang.</p></div>
+        <span class="vec-tags">SQLi · XSS · SSRF · IDOR · RACE CONDITION</span>
+        <span class="vec-arrow">▸</span>
+      </li>
+      <li class="vec" data-reveal style="--d:.05s">
+        <span class="vec-idx">V-02</span>
+        <div><h3>Network & Active Directory</h3><p class="vec-desc">Dari satu host foothold menuju Domain Admin. Kerberoasting, NTLM relay, dan segala cara jaringan internal saling mengkhianati.</p></div>
+        <span class="vec-tags">KERBEROAST · PASS-THE-HASH · LATERAL MOVEMENT</span>
+        <span class="vec-arrow">▸</span>
+      </li>
+      <li class="vec" data-reveal style="--d:.1s">
+        <span class="vec-idx">V-03</span>
+        <div><h3>Red Teaming</h3><p class="vec-desc">Simulasi adversary end-to-end: initial access, persistensi, eksfiltrasi — diukur melawan deteksi blue team sungguhan, bukan checklist.</p></div>
+        <span class="vec-tags">C2 · OPSEC · EVASION · PHISHING</span>
+        <span class="vec-arrow">▸</span>
+      </li>
+      <li class="vec" data-reveal style="--d:.15s">
+        <span class="vec-idx">V-04</span>
+        <div><h3>Reverse Engineering</h3><p class="vec-desc">Membongkar firmware, malware, dan binary tertutup sampai tak ada lagi rahasia yang tersisa di dalamnya.</p></div>
+        <span class="vec-tags">GHIDRA · IDA · DYNAMIC ANALYSIS</span>
+        <span class="vec-arrow">▸</span>
+      </li>
+      <li class="vec" data-reveal style="--d:.2s">
+        <span class="vec-idx">V-05</span>
+        <div><h3>Cloud Security</h3><p class="vec-desc">Bucket S3 yang "lupa" diprivat, IAM yang terlalu percaya — audit dan eksploitasi salah konfigurasi AWS & GCP.</p></div>
+        <span class="vec-tags">AWS · GCP · IAM · PACU · SCOUTSUITE</span>
+        <span class="vec-arrow">▸</span>
+      </li>
+      <li class="vec" data-reveal style="--d:.25s">
+        <span class="vec-idx">V-06</span>
+        <div><h3>DFIR — Forensik & Respons Insiden</h3><p class="vec-desc">Ketika yang terburuk sudah terjadi: rekonstruksi serangan bit demi bit, memburu pelaku, dan memulihkan operasi.</p></div>
+        <span class="vec-tags">VOLATILITY · VELOCIRAPTOR · THREAT HUNTING</span>
+        <span class="vec-arrow">▸</span>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- SEC 03 OPERASI -->
+<section id="operasi">
+  <div class="container">
+    <header class="sec-head" data-reveal>
+      <span class="sec-no">SEC.03 //</span>
+      <h2 data-scramble>ARSIP OPERASI</h2>
+      <span class="sec-note">nama klien disamarkan — NDA aktif</span>
+    </header>
+    <div class="ops-grid">
+      <article class="op s7" data-reveal>
+        <div class="op-top"><span class="op-code">OP-07 // BLACKOUT</span><span class="op-stamp">DECLASSIFIED</span></div>
+        <h3>Red Team — Sektor Finansial<small>SIMULASI APT · 21 HARI · 2025</small></h3>
+        <p>Skenario APT penuh: spear-phishing ke divisi keuangan, foothold via macro, hidup off-the-land selama tiga minggu, dan mencapai domain controller tanpa menyentuh satu pun alert EDR.</p>
+        <dl class="op-meta">
+          <div><dt>SCOPE</dt><dd>Full-scope red team, 4 operator</dd></div>
+          <div><dt>HASIL</dt><dd class="hot">Domain Admin dalam 9 hari · 0 deteksi</dd></div>
+          <div><dt>OUTPUT</dt><dd>46 rekomendasi · playbook deteksi baru</dd></div>
+        </dl>
+      </article>
+      <article class="op s5" data-reveal style="--d:.1s">
+        <div class="op-top"><span class="op-code">OP-06 // GLASSHOUSE</span><span class="op-stamp">DECLASSIFIED</span></div>
+        <h3>Web Pentest — Fintech<small>PRE-PRODUCTION AUDIT · 2024</small></h3>
+        <p>IDOR berantai plus race condition pada endpoint transfer: saldo bisa digandakan dengan dua request paralel. Ketemu dua minggu sebelum go-live.</p>
+        <dl class="op-meta">
+          <div><dt>CELAH</dt><dd class="hot">2 kritis · 5 tinggi</dd></div>
+          <div><dt>DAMPAK</dt><dd class="win">Dicegah sebelum produksi</dd></div>
+        </dl>
+      </article>
+      <article class="op s5" data-reveal>
+        <div class="op-top"><span class="op-code">OP-05 // COLDSTART</span><span class="op-stamp">DECLASSIFIED</span></div>
+        <h3>Reverse Engineering — IoT<small>FIRMWARE AUDIT · 2024</small></h3>
+        <p>Ekstrak firmware router via UART, menemukan kredensial root hardcoded dan backdoor debug milik vendor. CVE diajukan dan dikonfirmasi.</p>
+        <dl class="op-meta">
+          <div><dt>TOOLS</dt><dd>Ghidra · binwalk · logic analyzer</dd></div>
+          <div><dt>HASIL</dt><dd class="win">CVE-2024-████ disetujui</dd></div>
+        </dl>
+      </article>
+      <article class="op s7" data-reveal style="--d:.1s">
+        <div class="op-top"><span class="op-code">OP-04 // SILENTGRID</span><span class="op-stamp">DECLASSIFIED</span></div>
+        <h3>DFIR — Sektor Manufaktur<small>RESPONS INSIDEN RANSOMWARE · 2023</small></h3>
+        <p>Lantai produksi lumpuh 40 jam. Kami masuk, mengisolasi lateral movement dalam 12 jam pertama, memetakan seluruh rantai serangan, dan memulihkan data dari shadow copy yang lolos enkripsi.</p>
+        <dl class="op-meta">
+          <div><dt>ROOT CAUSE</dt><dd class="hot">RDP terekspos + kredensial reused</dd></div>
+          <div><dt>PEMULIHAN</dt><dd class="win">98% data · tanpa membayar tebusan</dd></div>
+          <div><dt>TOOLS</dt><dd>Volatility · Velociraptor · KAPE</dd></div>
+        </dl>
+      </article>
+      <article class="op s6" data-reveal>
+        <div class="op-top"><span class="op-code">OP-03 // PAPERWALL</span><span class="op-stamp">DECLASSIFIED</span></div>
+        <h3>Internal Pentest — Pemerintahan<small>ASSUMED BREACH · 2023</small></h3>
+        <p>Dimulai dari satu kabel LAN di ruang rapat. Enam jam kemudian: hash domain admin di tangan, lewat LLMNR poisoning dan kerberoasting yang tak terdeteksi.</p>
+        <dl class="op-meta">
+          <div><dt>WAKTU KE DA</dt><dd class="hot">6 jam 12 menit</dd></div>
+          <div><dt>TEKNIK</dt><dd>LLMNR · Kerberoast · GPP abuse</dd></div>
+        </dl>
+      </article>
+      <article class="op s6" data-reveal style="--d:.1s">
+        <div class="op-top"><span class="op-code">OP-02 // NIGHTMARKET</span><span class="op-stamp">DECLASSIFIED</span></div>
+        <h3>Bug Bounty — E-commerce<small>PROGRAM PUBLIK · 2022</small></h3>
+        <p>Rangkaian chained XSS ke SSRF yang berujung pembacaan metadata cloud. Empat belas laporan valid dalam satu kuartal.</p>
+        <dl class="op-meta">
+          <div><dt>LAPORAN</dt><dd>14 valid · 2 kritis</dd></div>
+          <div><dt>PENGAKUAN</dt><dd class="win">Hall of Fame + bounty tier atas</dd></div>
+        </dl>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- SEC 04 ARSENAL -->
+<section id="arsenal">
+  <div class="container">
+    <header class="sec-head" data-reveal>
+      <span class="sec-no">SEC.04 //</span>
+      <h2 data-scramble>ARSENAL & KEMAMPUAN</h2>
+      <span class="sec-note">kalibrasi per 2026</span>
+    </header>
+    <div class="ars-grid">
+      <div data-reveal>
+        <div class="bar-row"><div class="lbl"><b>WEB EXPLOITATION</b><span data-pct>95%</span></div><div class="bar"><i data-level="95"></i></div></div>
+        <div class="bar-row"><div class="lbl"><b>NETWORK & AD ATTACKS</b><span data-pct>90%</span></div><div class="bar"><i data-level="90"></i></div></div>
+        <div class="bar-row"><div class="lbl"><b>SECURE SCRIPTING (PYTHON / GO / BASH)</b><span data-pct>85%</span></div><div class="bar"><i data-level="85"></i></div></div>
+        <div class="bar-row"><div class="lbl"><b>FORENSICS & DFIR</b><span data-pct>80%</span></div><div class="bar"><i data-level="80"></i></div></div>
+        <div class="bar-row"><div class="lbl"><b>REVERSE ENGINEERING</b><span data-pct>78%</span></div><div class="bar"><i data-level="78"></i></div></div>
+        <div class="bar-row"><div class="lbl"><b>CLOUD SECURITY</b><span data-pct>72%</span></div><div class="bar"><i data-level="72"></i></div></div>
+      </div>
+      <div class="loadout" data-reveal style="--d:.15s">
+        <h3>▸ RECON & ENUM</h3>
+        <p><b>nmap</b> · <b>ffuf</b> · <b>amass</b> · <b>nuclei</b> · <b>BloodHound</b></p>
+        <h3>▸ OFFENSE</h3>
+        <p><b>Burp Suite Pro</b> · <b>Metasploit</b> · <b>Sliver</b> · <b>Impacket</b> · <b>sqlmap</b> · <b>CrackMapExec</b></p>
+        <h3>▸ RE & MALWARE</h3>
+        <p><b>Ghidra</b> · <b>radare2</b> · <b>x64dbg</b> · <b>remnux</b></p>
+        <h3>▸ MONITOR & DFIR</h3>
+        <p><b>Wireshark</b> · <b>Zeek</b> · <b>Volatility 3</b> · <b>Wazuh</b></p>
+        <h3>▸ LAPANGAN</h3>
+        <p><b>Kali</b> · <b>Parrot</b> · <b>Docker</b> · <b>Flipper Zero</b> · <b>Hak5 gear</b></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SEC 05 LOG -->
+<section id="log">
+  <div class="container">
+    <header class="sec-head" data-reveal>
+      <span class="sec-no">SEC.05 //</span>
+      <h2 data-scramble>LOG KARIER</h2>
+      <span class="sec-note">urutan kronologis, terbaru di atas</span>
+    </header>
+    <div class="tl">
+      <div class="tl-item" data-reveal>
+        <span class="tl-when">2025 — SEKARANG</span>
+        <h3>Senior Penetration Tester</h3>
+        <h4>NUSANTARI CYBER LABS — YOGYAKARTA</h4>
+        <p>Memimpin tim merah beranggotakan 4 orang untuk engagement finansial dan pemerintahan. Merancang metodologi internal dan mentor dua junior dari nol sampai mandiri.</p>
+      </div>
+      <div class="tl-item" data-reveal style="--d:.08s">
+        <span class="tl-when">2023 — 2025</span>
+        <h3>Penetration Tester</h3>
+        <h4>GARDA SEKURITI NUSANTARA — REMOTE</h4>
+        <p>30+ engagement web, network, dan mobile. Penulis template laporan yang memangkas waktu delivery 40%.</p>
+      </div>
+      <div class="tl-item" data-reveal style="--d:.16s">
+        <span class="tl-when">2021 — 2023</span>
+        <h3>Security Analyst (SOC Tier 2)</h3>
+        <h4>MANAGED SECURITY PROVIDER — JAKARTA</h4>
+        <p>Jaga malam, membaca alert, dan jatuh cinta pada packet. Dari sisi pertahanan, saya belajar persis bagaimana penyerang berpikir — bekal yang dipakai sampai sekarang.</p>
+      </div>
+      <div class="tl-item" data-reveal style="--d:.24s">
+        <span class="tl-when">2019 — 2021</span>
+        <h3>Bug Bounty Hunter & CTF Player</h3>
+        <h4>MANDIRI — TOP-50 PLATFORM BOUNTY REGIONAL</h4>
+        <p>Titik masuk. Belajar memecahkan sesuatu dengan cara paling keras kepala: mencoba sampai paham, bukan sampai beruntung.</p>
+      </div>
+    </div>
+
+    <div class="certs" data-reveal>
+      <div class="cert"><span class="cid">OSCP</span><span class="cname">Offensive Security Certified Professional — OffSec</span><span class="ciss">OFFSEC</span><span class="cyr">2024 · <span class="cstat">VERIFIED</span></span></div>
+      <div class="cert"><span class="cid">CRTO</span><span class="cname">Certified Red Team Operator</span><span class="ciss">ZERO-POINTS</span><span class="cyr">2024 · <span class="cstat">VERIFIED</span></span></div>
+      <div class="cert"><span class="cid">eCPPT</span><span class="cname">eLearnSecurity Certified Professional Penetration Tester</span><span class="ciss">INE SECURITY</span><span class="cyr">2023 · <span class="cstat">VERIFIED</span></span></div>
+      <div class="cert"><span class="cid">BTL1</span><span class="cname">Blue Team Level 1</span><span class="ciss">SECURITY BLUE TEAM</span><span class="cyr">2023 · <span class="cstat">VERIFIED</span></span></div>
+      <div class="cert"><span class="cid">SEC+</span><span class="cname">CompTIA Security+</span><span class="ciss">COMPTIA</span><span class="cyr">2022 · <span class="cstat">VERIFIED</span></span></div>
+    </div>
+  </div>
+</section>
+
+<!-- SEC 06 KANAL -->
+<section id="kanal">
+  <div class="container kanal-grid">
+    <div class="kanal-left" data-reveal>
+      <span class="sec-no" style="display:block;margin-bottom:20px">SEC.06 //</span>
+      <h2>SIAP MENGUJI <em>PERTAHANANMU?</em></h2>
+      <p>Red team, pentest, audit, atau sekadar second opinion soal postur keamananmu. Kirim brief — saya balas dengan pertanyaan yang tepat, bukan template penawaran.</p>
+      <dl class="ch-list">
+        <div class="ch"><dt>EMAIL</dt><dd>mifzal@nugroho.sec.id</dd></div>
+        <div class="ch"><dt>GITHUB</dt><dd>github.com/mifzaleko</dd></div>
+        <div class="ch"><dt>LINKEDIN</dt><dd>in/mifzal-eko-nugroho</dd></div>
+        <div class="ch"><dt>TRYHACKME</dt><dd>thm/men_sys · top 1%</dd></div>
+        <div class="ch"><dt>PGP</dt><dd>0x9F3C A114 7BD2 06E8</dd></div>
+      </dl>
+    </div>
+    <div data-reveal style="--d:.15s">
+      <form class="term-form" id="contact-form">
+        <div class="term-bar"><i></i><i></i><i></i><span>kanal-aman — formulir terenkripsi</span></div>
+        <div class="term-body">
+          <div class="f-row"><label for="f-nama">&gt; IDENTITAS PENGIRIM</label><input id="f-nama" type="text" placeholder="nama / organisasi" required autocomplete="name"></div>
+          <div class="f-row"><label for="f-email">&gt; JALUR BALASAN</label><input id="f-email" type="email" placeholder="email@anda.id" required autocomplete="email"></div>
+          <div class="f-row"><label for="f-pesan">&gt; PAYLOAD PESAN</label><textarea id="f-pesan" rows="5" placeholder="ceritakan scope, target, dan timeline…" required></textarea></div>
+          <button class="btn" type="submit" id="send-btn">ENKRIPSI &amp; KIRIM ▸</button>
+          <p id="form-ok">&gt; payload diterima…<br>&gt; dienkripsi AES-256-GCM… OK<br>&gt; ditandatangani… OK<br>&gt; <b>TERKIRIM.</b> SLA respons &lt; 24 jam.</p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container foot">
+    <div>
+      <div class="fp">PGP: 9F3C A114 7BD2 06E8 55D0 &nbsp;02B1 4E77 90FF 3A2C</div>
+      <div>© 2026 <b>MIFZAL EKO NUGROHO</b> — YOGYAKARTA, ID</div>
+    </div>
+    <div>
+      <div>DITULIS &amp; DIKOMPILASI MANUAL. BUKAN TEMPLATE.</div>
+      <div>TEKAN <b>CTRL+U</b> — SEMUA TRIK TERBUKA DI SANA.</div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(function(){
+"use strict";
+const reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const fine = matchMedia('(pointer: fine)').matches;
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+
+/* ---------- BOOT SEQUENCE ---------- */
+const bootLines = [
+  '[ OK ] memantik modul kriptografi',
+  '[ OK ] memuat dossier: M.EKO.NUGROHO',
+  '[ OK ] handshake TLS 1.3 / X25519',
+  '[ !! ] ego terdeteksi: dalam batas wajar',
+  '> membuka antarmuka…'
+];
+const bootEl = $('#boot'), bootTxt = $('#boot-text');
+function endBoot(){ bootEl.classList.add('done'); setTimeout(()=>bootEl.remove(), 600); startHero(); }
+if (reduced){ bootTxt.textContent = bootLines.join('\n'); setTimeout(endBoot, 120); }
+else {
+  let li = 0;
+  (function nextLine(){
+    if (li >= bootLines.length){ setTimeout(endBoot, 320); return; }
+    bootTxt.textContent += bootLines[li] + '\n'; li++;
+    setTimeout(nextLine, 150);
+  })();
+}
+
+/* ---------- JAM ---------- */
+const clockEl = $('#clock');
+function tick(){
+  const d = new Date();
+  const t = d.toLocaleTimeString('id-ID',{timeZone:'Asia/Jakarta',hour12:false});
+  clockEl.innerHTML = t + ' WIB <i>▮</i>';
+}
+tick(); setInterval(tick, 1000);
+
+/* ---------- SCRAMBLE DECODE ---------- */
+const GLYPHS = '!<>-_\\/[]{}=+*^?#01XZ$%&';
+function scramble(el){
+  const final = el.dataset.text || el.textContent;
+  el.dataset.text = final;
+  if (reduced){ el.textContent = final; return; }
+  const start = performance.now(), dur = 850;
+  (function frame(now){
+    const p = Math.min(1,(now-start)/dur);
+    const solid = Math.floor(p * final.length);
+    let out = final.slice(0, solid);
+    for (let i = solid; i < final.length; i++)
+      out += final[i] === ' ' ? ' ' : GLYPHS[(Math.random()*GLYPHS.length)|0];
+    el.textContent = out;
+    if (p < 1) requestAnimationFrame(frame); else el.textContent = final;
+  })(start);
+}
+
+/* ---------- TERMINAL HERO ---------- */
+const termEl = $('#term');
+const script = [
+  ['cmd','whoami'],
+  ['out','mifzal.eko.nugroho — pentester & peneliti keamanan'],
+  ['cmd','nmap -sV --script vuln target-anda.co.id'],
+  ['out','42 port dipindai · 3 celah kritis ditandai · laporan menyusul'],
+  ['cmd','./kanal --buka --enkripsi'],
+  ['out hot','TLS 1.3 · X25519 · SIAP MENERIMA BRIEF █']
+];
+let heroStarted = false;
+function startHero(){
+  if (heroStarted) return; heroStarted = true;
+  $$('[data-scramble]').forEach((el,i)=>setTimeout(()=>scramble(el), i*180));
+  if (reduced){
+    script.forEach(([c,t])=>{ const d=document.createElement('div'); d.className=c; d.textContent=t; termEl.appendChild(d); });
+    return;
+  }
+  let i = 0;
+  (function typeLine(){
+    if (i >= script.length) return;
+    const [cls, text] = script[i];
+    const div = document.createElement('div'); div.className = cls; termEl.appendChild(div);
+    let c = 0;
+    const speed = cls === 'cmd' ? 34 : 12;
+    (function typeChar(){
+      div.textContent = text.slice(0, ++c);
+      if (c < text.length) setTimeout(typeChar, speed);
+      else { i++; setTimeout(typeLine, cls==='cmd' ? 380 : 300); }
+    })();
+  })();
+}
+
+/* ---------- MARQUEE ---------- */
+const items = ['WEB EXPLOITATION','ACTIVE DIRECTORY','RED TEAM','MALWARE REVERSING','OSINT','CLOUD MISCONFIG','BUG BOUNTY','DFIR','CTF','OPSEC'];
+const half = items.map(t=>`<span>${t}<b>▸</b></span>`).join('');
+$('#mq').innerHTML = half + half;
+
+/* ---------- REVEAL + COUNTER + BARS + SCRAMBLE-ON-SCROLL ---------- */
+function countUp(el){
+  const target = +el.dataset.val, suf = el.dataset.suffix || '';
+  if (reduced){ el.textContent = target + suf; return; }
+  const start = performance.now(), dur = 1400;
+  (function f(now){
+    const p = Math.min(1,(now-start)/dur), e = 1-Math.pow(1-p,3);
+    el.textContent = Math.round(target*e) + suf;
+    if (p<1) requestAnimationFrame(f);
+  })(start);
+}
+const io = new IntersectionObserver(entries=>{
+  entries.forEach(en=>{
+    if (!en.isIntersecting) return;
+    const t = en.target;
+    t.classList.add('in');
+    t.querySelectorAll('[data-scramble]').forEach(el=>{ if(!el.dataset.done){ el.dataset.done=1; scramble(el);} });
+    t.querySelectorAll('.num[data-val]').forEach(el=>{ if(!el.dataset.done){ el.dataset.done=1; countUp(el);} });
+    t.querySelectorAll('.bar i').forEach(b=>{ if(!b.dataset.done){ b.dataset.done=1; b.style.width = b.dataset.level + '%'; } });
+    io.unobserve(t);
+  });
+},{threshold:.18});
+$$('[data-reveal], .sec-head, #hero').forEach(el=>io.observe(el));
+// judul section scramble saat masuk viewport
+$$('.sec-head').forEach(h=>{
+  const o = new IntersectionObserver(es=>es.forEach(e=>{
+    if(e.isIntersecting){ h.querySelectorAll('[data-scramble]').forEach(el=>{ if(!el.dataset.done){el.dataset.done=1; scramble(el);} }); o.unobserve(h); }
+  }),{threshold:.4});
+  o.observe(h);
+});
+
+/* ---------- NAV ACTIVE + PROGRESS ---------- */
+const navLinks = $$('.nav-links a');
+const sections = navLinks.map(a=>$(a.getAttribute('href')));
+addEventListener('scroll', ()=>{
+  const y = scrollY, max = document.documentElement.scrollHeight - innerHeight;
+  $('#progress').style.width = (y/max*100) + '%';
+  let cur = 0;
+  sections.forEach((s,i)=>{ if (s && y >= s.offsetTop - 200) cur = i; });
+  navLinks.forEach((a,i)=>a.classList.toggle('active', i===cur));
+  if (scene3d) scene3d.scrollY = y;
+},{passive:true});
+
+/* ---------- KURSOR CROSSHAIR ---------- */
+if (fine && !reduced){
+  const xh = $('#xhair'), xc = $('#xcoords');
+  let mx=innerWidth/2, my=innerHeight/2, cx=mx, cy=my;
+  addEventListener('mousemove', e=>{
+    mx=e.clientX; my=e.clientY;
+    xc.style.left = (mx+18)+'px'; xc.style.top = (my+18)+'px';
+    xc.textContent = 'X:'+String(mx|0).padStart(4,'0')+' Y:'+String(my|0).padStart(4,'0');
+  });
+  document.addEventListener('mouseover', e=>{
+    document.body.classList.toggle('hov', !!e.target.closest('a,button,.vec,.op,.cert,input,textarea'));
+  });
+  (function loop(){
+    cx += (mx-cx)*.2; cy += (my-cy)*.2;
+    xh.style.left = cx+'px'; xh.style.top = cy+'px';
+    requestAnimationFrame(loop);
+  })();
+}
+
+/* ---------- 3D CORE (THREE.JS) ---------- */
+let scene3d = null;
+if (window.THREE){
+  const canvas = $('#gl'), hero = $('#hero');
+  const renderer = new THREE.WebGLRenderer({canvas, antialias:true, alpha:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  const scene = new THREE.Scene();
+  const camera = new THREE.PerspectiveCamera(50,1,.1,100);
+  camera.position.z = 7.5;
+  const group = new THREE.Group(); scene.add(group);
+
+  const outer = new THREE.Mesh(new THREE.IcosahedronGeometry(2.3,1),
+    new THREE.MeshBasicMaterial({color:0x5cf59a, wireframe:true, transparent:true, opacity:.34}));
+  const inner = new THREE.Mesh(new THREE.IcosahedronGeometry(1.15,0),
+    new THREE.MeshBasicMaterial({color:0xffc36b, wireframe:true, transparent:true, opacity:.22}));
+  const ring = new THREE.Mesh(new THREE.TorusGeometry(3.25,.006,3,140),
+    new THREE.MeshBasicMaterial({color:0x2f7a52, transparent:true, opacity:.7}));
+  ring.rotation.x = Math.PI/2.35;
+
+  const N=900, pos=new Float32Array(N*3);
+  for(let i=0;i<N;i++){
+    const r=3+Math.random()*1.7, th=Math.random()*Math.PI*2, ph=Math.acos(2*Math.random()-1);
+    pos[i*3]=r*Math.sin(ph)*Math.cos(th);
+    pos[i*3+1]=r*Math.sin(ph)*Math.sin(th);
+    pos[i*3+2]=r*Math.cos(ph);
+  }
+  const pg=new THREE.BufferGeometry();
+  pg.setAttribute('position', new THREE.BufferAttribute(pos,3));
+  const pts=new THREE.Points(pg, new THREE.PointsMaterial({color:0x5cf59a,size:.022,transparent:true,opacity:.65}));
+  group.add(outer,inner,ring,pts);
+
+  scene3d = {scrollY:0, tx:0, ty:0};
+  if (fine) hero.addEventListener('mousemove', e=>{
+    const r = hero.getBoundingClientRect();
+    scene3d.tx = ((e.clientX-r.left)/r.width - .5);
+    scene3d.ty = ((e.clientY-r.top)/r.height - .5);
+  });
+  function resize(){
+    const w = hero.offsetWidth, h = hero.offsetHeight;
+    renderer.setSize(w,h,false);
+    camera.aspect = w/h; camera.updateProjectionMatrix();
+  }
+  resize(); addEventListener('resize', resize);
+
+  function render(){
+    outer.rotation.y += .0016; outer.rotation.x += .0006;
+    inner.rotation.y -= .003;  inner.rotation.z += .002;
+    ring.rotation.z  += .0012;
+    pts.rotation.y   -= .0005;
+    group.rotation.y += (scene3d.tx*.6 - group.rotation.y*.05);
+    group.rotation.x += ((scene3d.ty*.35 + scene3d.scrollY*.0004) - group.rotation.x) * .04;
+    group.position.y = Math.min(.9, scene3d.scrollY*.0007);
+    renderer.render(scene,camera);
+  }
+  if (reduced){ render(); }
+  else (function loop(){ render(); requestAnimationFrame(loop); })();
+}
+
+/* ---------- FORM ---------- */
+$('#contact-form').addEventListener('submit', e=>{
+  e.preventDefault();
+  const btn = $('#send-btn');
+  btn.disabled = true;
+  if (reduced){ btn.style.display='none'; $('#form-ok').style.display='block'; return; }
+  let dots = 0;
+  const iv = setInterval(()=>{ btn.textContent = 'MENGENKRIPSI' + '.'.repeat(++dots % 4); }, 220);
+  setTimeout(()=>{
+    clearInterval(iv);
+    btn.style.display='none';
+    $('#form-ok').style.display='block';
+  }, 1400);
+});
+})();
+</script>
+</body>
+</html>
