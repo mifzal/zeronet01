@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mifzal Eko Nugroho — Penetration Tester & Security Researcher</title>
+<meta name="description" content="Portofolio Mifzal Eko Nugroho: penetration tester, red teamer, dan peneliti keamanan.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700;900&family=Space+Grotesk:wght@400;500;600&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=2">
+</head>
+<body>
+
+<div class="noise" aria-hidden="true"></div>
+<div class="scanlines" aria-hidden="true"></div>
+<div id="progress" aria-hidden="true"></div>
+<div id="xhair" aria-hidden="true"><span class="ring"></span></div>
+<div id="xcoords" aria-hidden="true"></div>
+
+<div id="boot" aria-hidden="true"><pre id="boot-text"></pre></div>
+
+<nav>
+  <div class="container nav-in">
+    <a class="brand" href="#hero">M.E.N<em>_</em>SYS</a>
+    <div class="nav-links">
+      <a href="#profil"><b>01</b>PROFIL</a>
+      <a href="#vektor"><b>02</b>VEKTOR</a>
+      <a href="#operasi"><b>03</b>OPERASI</a>
+      <a href="#arsenal"><b>04</b>ARSENAL</a>
+      <a href="#log"><b>05</b>LOG</a>
+      <a href="#bukti"><b>06</b>BUKTI</a>
+      <a href="#kanal"><b>07</b>KANAL</a>
+    </div>
+    <div id="clock">--:--:-- WIB <i>▮</i></div>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<section id="hero">
+  <canvas id="gl" aria-hidden="true"></canvas>
+  <div class="hero-grid" aria-hidden="true"></div>
+  <div class="container hero-inner">
+    <p class="hero-kick mono">[root@nusantara ~]# <span>id -u</span> → 0</p>
+    <h1>
+      <span class="h1-l"><span data-scramble data-text="MIFZAL EKO">MIFZAL EKO</span></span>
+      <span class="h1-l indent"><span data-scramble data-text="NUGROHO">NUGROHO</span> <span class="blk">▮</span></span>
+    </h1>
+    <p class="hero-role">Penetration Tester <span>//</span> Security Researcher <span>//</span> Peretas Etis</p>
+    <div class="hero-cols">
+      <div class="term">
+        <div class="term-bar"><i></i><i></i><i></i><span>tty1 — sesi-aman</span></div>
+        <div class="term-body" id="term"></div>
+      </div>
+      <div class="hero-side">
+        <span class="hs"><i>STATUS</i><b>AVAILABLE FOR OPS</b></span>
+        <span class="hs"><i>LOKASI</i><b>YOGYAKARTA, ID</b></span>
+        <span class="hs"><i>MODE</i><b>OFFENSIVE SECURITY</b></span>
+        <span class="hs"><i>CLEARANCE</i><b>██ ██████████</b></span>
+      </div>
+    </div>
+  </div>
+  <div class="container hero-strip">
+    <span>KANAL: <b>TERENKRIPSI</b></span>
+    <span>PROTOKOL: <b>TLS 1.3</b></span>
+    <span>UPTIME: <b>99.98%</b></span>
+    <span id="waf-tag">WAF: <b>INTACT</b></span>
+    <span class="scroll-cue">GULIR = ROKET MELUNCUR ▼</span>
+  </div>
+</section>
+
+<div class="marquee" aria-hidden="true">
+  <div class="marquee-track" id="mq"></div>
+</div>
+
+<!-- ============ SEC.01 PROFIL ============ -->
+<section id="profil">
+  <div class="container">
+    <header class="sec-head" data-reveal>
+      <span class="sec-no">SEC.01 //</span>
+      <h2 data-scramble>SUBJEK: M.E. NUGROHO</h2>
+      <span class="sec-note">dossier terbuka</span>
+    </header>
+    <div class="profil-grid">
+      <div class="profil-sticky" data-reveal>
+        <figure class="idcard">
+          <span class="stamp">VERIFIED</span>
+          <div class="photo">
+            <img src="https://picsum.photos/seed/mifzal-security-operator/600/760" alt="Foto Mifzal Eko Nugroho">
+            <span class="scan" aria-hidden="true"></span>
+          </div>
+          <div class="rows">
+            <div><dt>ID</dt><dd>MEN-2026-ID</dd></div>
+            <div><dt>NAMA</dt><dd>MIFZAL EKO NUGROHO</dd></div>
+            <div><dt>FUNGSI</dt><dd>OFFENSIVE SECURITY</dd></div>
+            <div><dt>BASIS</dt><dd>YOGYAKARTA −7.7956°, 110.3695°</dd></div>
+            <div><dt>STATUS</dt><dd style="color:var(--green)">● AKTIF</dd></div>
+          </div>
+        </figure>
+      </div>
+      <div class="profil-body">
+        <p data-reveal>Enam tahun terakhir saya habiskan untuk <b>masuk ke tempat yang seharusnya tak bisa dimasuki siapa pun</b> — secara legal, dengan surat izin tertulis, dan diakhiri laporan setebal novel.</p>
+        <p data-reveal style="--d:.1s">Saya percaya pertahanan terbaik diuji oleh penyerang yang sungguhan. Karena itu pekerjaan saya sederhana: berpikir seperti adversary, bergerak seperti adversary, lalu <b>menyerahkan peta lengkap cara menjebol sistemmu sebelum orang lain yang melakukannya</b>.</p>
+        <p data-reveal style="--d:.15s">Fokus saya di web application security, serangan Active Directory, dan red teaming. Di luar jam kerja: main CTF, nulis writeup, dan mengejar bug bounty — bukan demi papan peringkat, tapi karena setiap celah baru adalah puzzle yang belum pernah saya pecahkan.</p>
+        <blockquote class="quote" data-reveal style="--d:.2s">&gt; "Asumsi adalah celah keamanan yang tidak pernah kamu patch."</blockquote>
+        <div class="stat-strip" data-reveal style="--d:.25s">
+          <div class="stat"><div class="num" data-val="6" data-suffix="">0</div><div class="lbl">TAHUN BEROPERASI</div></div>
+          <div class="stat"><div class="num" data-val="48" data-suffix="+">0</div><div class="lbl">OPERASI SELESAI</div></div>
+          <div class="stat"><div class="num" data-val="27" data-suffix="">0</div><div class="lbl">CELAH KRITIS DILAPORKAN</div></div>
+          <div class="stat"><div class="num" data-val="15" data-suffix="">0</div><div class="lbl">FINAL CTF</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SEC.02 VEKTOR ============ -->
+<section id="vektor">
+  <div class="container">
+    <header class="sec-head" data-reveal>
+      <span class="sec-no">SEC.02 //</span>
+      <h2 data-scramble>VEKTOR SERANGAN</h2>
+      <span class="sec-note">6 disiplin · 1 obsesi</span>
+    </header>
+    <ul class="vec-list">
+      <li class="vec" data-reveal>
+        <span class="vec-idx">V-01</span>
+        <div><h3>Web Application Pentest</h3><p class="vec-desc">Membedah aplikasi web lapis demi lapis — dari auth yang bolong sampai logika bisnis yang bisa dipelintir jadi mesin pencetak uang.</p></div>
+        <span class="vec-tags">SQLi · XSS · SSRF · IDOR · RACE CONDITION</span>
+        <span class="vec-arrow">▸</span>
+      </li>
+      <li class="vec" data-reveal style="--d:.05s">
+        <span class="vec-idx">V-02</span>
+        <div><h3>Network & Active Directory</h3><p class="vec-desc">Dari satu host foothold menuju Domain Admin. Kerberoasting, NTLM relay, dan segala cara jaringan internal saling mengkhianati.</p></div>
+        <span class="vec-tags">KERBEROAST · PASS-THE-HASH · LATERAL MOVEMENT</span>
+        <span class="vec-arrow">▸</span>
+      </li>
+      <li class="vec" data-reveal style="--d:.1s">
+        <span class="vec-idx">V-03</span>
+        <div><h3>Red Teaming</h3><p class="vec-desc">Simulasi adversary end-to-end: initial access, persistensi, eksfiltrasi — diukur melawan deteksi blue team sungguhan, bukan checklist.</p></div>
+        <span class="vec-tags">C2 · OPSEC · EVASION · PHISHING</span>
+        <span class="vec-arrow">▸</span>
+      </li>
+      <li class="vec" data-reveal style="--d:.15s">
+        <span class="vec-idx">V-04</span>
+        <div><h3>Reverse Engineering</h3><p class="vec-desc">Membongkar firmware, malware, dan binary tertutup sampai tak ada lagi rahasia yang tersisa di dalamnya.</p></div>
+        <span class="vec-tags">GHIDRA · IDA · DYNAMIC ANALYSIS</span>
+        <span class="vec-arrow">▸</span>
+      </li>
+      <li class="vec" data-reveal style="--d:.2s">
+        <span class="vec-idx">V-05</span>
+        <div><h3>Cloud Security</h3><p class="vec-desc">Bucket S3 yang "lupa" diprivat, IAM yang terlalu percaya — audit dan eksploitasi salah konfigurasi AWS & GCP.</p></div>
+        <span class="vec-tags">AWS · GCP · IAM · PACU · SCOUTSUITE</span>
+        <span class="vec-arrow">▸</span>
+      </li>
+      <li class="vec" data-reveal style="--d:.25s">
+        <span class="vec-idx">V-06</span>
+        <div><h3>DFIR — Forensik & Respons Insiden</h3><p class="vec-desc">Ketika yang terburuk sudah terjadi: rekonstruksi serangan bit demi bit, memburu pelaku, dan memulihkan operasi.</p></div>
+        <span class="vec-tags">VOLATILITY · VELOCIRAPTOR · THREAT HUNTING</span>
+        <span class="vec-arrow">▸</span>
+      </li>
+    </ul>
+  </div>
+</section>
+
+<!-- ============ SEC.03 OPERASI ============ -->
+<section id="operasi">
+  <div class="container">
+    <header class="sec-head" data-reveal>
+      <span class="sec-no">SEC.03 //</span>
+      <h2 data-scramble>ARSIP OPERASI</h2>
+      <span class="sec-note">nama klien disamarkan — NDA aktif</span>
+    </header>
+    <div class="ops-grid">
+      <article class="op s7" data-reveal>
+        <div class="op-top"><span class="op-code">OP-07 // BLACKOUT</span><span class="op-stamp">DECLASSIFIED</span></div>
+        <h3>Red Team — Sektor Finansial<small>SIMULASI APT · 21 HARI · 2025</small></h3>
+        <p>Skenario APT penuh: spear-phishing ke divisi keuangan, foothold via macro, hidup off-the-land selama tiga minggu, dan mencapai domain controller tanpa menyentuh satu pun alert EDR.</p>
+        <dl class="op-meta">
+          <div><dt>SCOPE</dt><dd>Full-scope red team, 4 operator</dd></div>
+          <div><dt>HASIL</dt><dd class="hot">Domain Admin dalam 9 hari · 0 deteksi</dd></div>
+          <div><dt>OUTPUT</dt><dd>46 rekomendasi · playbook deteksi baru</dd></div>
+        </dl>
+      </article>
+      <article class="op s5" data-reveal style="--d:.1s">
+        <div class="op-top"><span class="op-code">OP-06 // GLASSHOUSE</span><span class="op-stamp">DECLASSIFIED</span></div>
+        <h3>Web Pentest — Fintech<small>PRE-PRODUCTION AUDIT · 2024</small></h3>
+        <p>IDOR berantai plus race condition pada endpoint transfer: saldo bisa digandakan dengan dua request paralel. Ketemu dua minggu sebelum go-live.</p>
+        <dl class="op-meta">
+          <div><dt>CELAH</dt><dd class="hot">2 kritis · 5 tinggi</dd></div>
+          <div><dt>DAMPAK</dt><dd class="win">Dicegah sebelum produksi</dd></div>
+        </dl>
+      </article>
+      <article class="op s5" data-reveal>
+        <div class="op-top"><span class="op-code">OP-05 // COLDSTART</span><span class="op-stamp">DECLASSIFIED</span></div>
+        <h3>Reverse Engineering — IoT<small>FIRMWARE AUDIT · 2024</small></h3>
+        <p>Ekstrak firmware router via UART, menemukan kredensial root hardcoded dan backdoor debug milik vendor. CVE diajukan dan dikonfirmasi.</p>
+        <dl class="op-meta">
+          <div><dt>TOOLS</dt><dd>Ghidra · binwalk · logic analyzer</dd></div>
+          <div><dt>HASIL</dt><dd class="win">CVE-2024-████ disetujui</dd></div>
+        </dl>
+      </article>
+      <article class="op s7" data-reveal style="--d:.1s">
+        <div class="op-top"><span class="op-code">OP-04 // SILENTGRID</span><span class="op-stamp">DECLASSIFIED</span></div>
+        <h3>DFIR — Sektor Manufaktur<small>RESPONS INSIDEN RANSOMWARE · 2023</small></h3>
+        <p>Lantai produksi lumpuh 40 jam. Kami masuk, mengisolasi lateral movement dalam 12 jam pertama, memetakan seluruh rantai serangan, dan memulihkan data dari shadow copy yang lolos enkripsi.</p>
+        <dl class="op-meta">
+          <div><dt>ROOT CAUSE</dt><dd class="hot">RDP terekspos + kredensial reused</dd></div>
+          <div><dt>PEMULIHAN</dt><dd class="win">98% data · tanpa membayar tebusan</dd></div>
+          <div><dt>TOOLS</dt><dd>Volatility · Velociraptor · KAPE</dd></div>
+        </dl>
+      </article>
+      <article class="op s6" data-reveal>
+        <div class="op-top"><span class="op-code">OP-03 // PAPERWALL</span><span class="op-stamp">DECLASSIFIED</span></div>
+        <h3>Internal Pentest — Pemerintahan<small>ASSUMED BREACH · 2023</small></h3>
+        <p>Dimulai dari satu kabel LAN di ruang rapat. Enam jam kemudian: hash domain admin di tangan, lewat LLMNR poisoning dan kerberoasting yang tak terdeteksi.</p>
+        <dl class="op-meta">
+          <div><dt>WAKTU KE DA</dt><dd class="hot">6 jam 12 menit</dd></div>
+          <div><dt>TEKNIK</dt><dd>LLMNR · Kerberoast · GPP abuse</dd></div>
+        </dl>
+      </article>
+      <article class="op s6" data-reveal style="--d:.1s">
+        <div class="op-top"><span class="op-code">OP-02 // NIGHTMARKET</span><span class="op-stamp">DECLASSIFIED</span></div>
+        <h3>Bug Bounty — E-commerce<small>PROGRAM PUBLIK · 2022</small></h3>
+        <p>Rangkaian chained XSS ke SSRF yang berujung pembacaan metadata cloud. Empat belas laporan valid dalam satu kuartal.</p>
+        <dl class="op-meta">
+          <div><dt>LAPORAN</dt><dd>14 valid · 2 kritis</dd></div>
+          <div><dt>PENGAKUAN</dt><dd class="win">Hall of Fame + bounty tier atas</dd></div>
+        </dl>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SEC.04 ARSENAL ============ -->
+<section id="arsenal">
+  <div class="container">
+    <header class="sec-head" data-reveal>
+      <span class="sec-no">SEC.04 //</span>
+      <h2 data-scramble>ARSENAL & KEMAMPUAN</h2>
+      <span class="sec-note">kalibrasi per 2026</span>
+    </header>
+    <div class="ars-grid">
+      <div data-reveal>
+        <div class="bar-row"><div class="lbl"><b>WEB EXPLOITATION</b><span>95%</span></div><div class="bar"><i data-level="95"></i></div></div>
+        <div class="bar-row"><div class="lbl"><b>NETWORK & AD ATTACKS</b><span>90%</span></div><div class="bar"><i data-level="90"></i></div></div>
+        <div class="bar-row"><div class="lbl"><b>SECURE SCRIPTING (PYTHON / GO / BASH)</b><span>85%</span></div><div class="bar"><i data-level="85"></i></div></div>
+        <div class="bar-row"><div class="lbl"><b>FORENSICS & DFIR</b><span>80%</span></div><div class="bar"><i data-level="80"></i></div></div>
+        <div class="bar-row"><div class="lbl"><b>REVERSE ENGINEERING</b><span>78%</span></div><div class="bar"><i data-level="78"></i></div></div>
+        <div class="bar-row"><div class="lbl"><b>CLOUD SECURITY</b><span>72%</span></div><div class="bar"><i data-level="72"></i></div></div>
+      </div>
+      <div class="loadout" data-reveal style="--d:.15s">
+        <h3>▸ RECON & ENUM</h3>
+        <p><b>nmap</b> · <b>ffuf</b> · <b>amass</b> · <b>nuclei</b> · <b>BloodHound</b></p>
+        <h3>▸ OFFENSE</h3>
+        <p><b>Burp Suite Pro</b> · <b>Metasploit</b> · <b>Sliver</b> · <b>Impacket</b> · <b>sqlmap</b> · <b>CrackMapExec</b></p>
+        <h3>▸ RE & MALWARE</h3>
+        <p><b>Ghidra</b> · <b>radare2</b> · <b>x64dbg</b> · <b>remnux</b></p>
+        <h3>▸ MONITOR & DFIR</h3>
+        <p><b>Wireshark</b> · <b>Zeek</b> · <b>Volatility 3</b> · <b>Wazuh</b></p>
+        <h3>▸ LAPANGAN</h3>
+        <p><b>Kali</b> · <b>Parrot</b> · <b>Docker</b> · <b>Flipper Zero</b> · <b>Hak5 gear</b></p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SEC.05 LOG KARIER ============ -->
+<section id="log">
+  <div class="container">
+    <header class="sec-head" data-reveal>
+      <span class="sec-no">SEC.05 //</span>
+      <h2 data-scramble>LOG KARIER</h2>
+      <span class="sec-note">urutan kronologis, terbaru di atas</span>
+    </header>
+    <div class="tl">
+      <div class="tl-item" data-reveal>
+        <span class="tl-when">2025 — SEKARANG</span>
+        <h3>management tools ai</h3>
+        <h4>google adsense - USA</h4>
+        <p>management tools ai kebutuhan untuk menggenerate content ai video secara otomatis sehingga memudahkan dan memepercepat</p>
+      </div>
+      <div class="tl-item" data-reveal style="--d:.08s">
+        <span class="tl-when">2023 — sekarang/span>
+        <h3>Penetration Tester</h3>
+        <h4>mandiri</h4>
+        <p>sering research secara mandiri mencari detail hingga detail celah keamanan website yang rentan terhadap serangan orang yang tak bertanggung jawab</p>
+      </div>
+      <div class="tl-item" data-reveal style="--d:.16s">
+        <span class="tl-when">2026 — 2030</span>
+        <h3>teknik informatika</h3>
+        <h4>uin sunan kalijaga - yogyakarta</h4>
+        <p>student at uin sunan kalijaga</p>
+      </div>
+      <div class="tl-item" data-reveal style="--d:.24s">
+        <span class="tl-when">2019 — 2021</span>
+        <h3>Bug Bounty Hunter & CTF Player</h3>
+        <h4>MANDIRI — TOP-50 PLATFORM BOUNTY REGIONAL</h4>
+        <p>Titik masuk. Belajar memecahkan sesuatu dengan cara paling keras kepala: mencoba sampai paham, bukan sampai beruntung.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SEC.06 DINDING BUKTI ============ -->
+<section id="bukti">
+  <div class="container">
+    <header class="sec-head" data-reveal>
+      <span class="sec-no">SEC.06 //</span>
+      <h2 data-scramble>DINDING BUKTI</h2>
+      <span class="sec-note">semua entri dapat diverifikasi pihak ketiga</span>
+    </header>
+
+    <div class="tabs" role="tablist" aria-label="Kategori pengakuan">
+      <button class="tab active" role="tab" aria-selected="true"  data-tab="vuln">[ CELAH & CVE ]</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="cert">[ SERTIFIKAT ]</button>
+      <button class="tab" role="tab" aria-selected="false" data-tab="letter">[ SURAT PENGHARGAAN ]</button>
+    </div>
+
+    <!-- ── PANEL 1: LAPORAN KERENTANAN ── -->
+    <div class="panel active" id="panel-vuln" role="tabpanel">
+      <ul class="vuln-list">
+        <!-- ══════════ TAMBAH LAPORAN BARU: salin satu blok <li> di bawah ini, tempel di paling atas list ══════════ -->
+        <li class="vuln">
+          <span class="v-id mono">CVE-2025-████</span>
+          <span class="v-target">Plugin WordPress populer — unauth RCE via file upload</span>
+          <span class="v-sev sev-c">CRITICAL</span>
+          <span class="v-status patched mono">PATCHED</span>
+          <span class="v-year mono">2025</span>
+        </li>
+        <li class="vuln">
+          <span class="v-id mono">CVE-2024-████</span>
+          <span class="v-target">Firmware router IoT — backdoor debug + root hardcoded</span>
+          <span class="v-sev sev-c">CRITICAL</span>
+          <span class="v-status patched mono">PATCHED</span>
+          <span class="v-year mono">2024</span>
+        </li>
+        <li class="vuln">
+          <span class="v-id mono">HOF-2023-007</span>
+          <span class="v-target">E-wallet fintech — race condition ganda saldo</span>
+          <span class="v-sev sev-h">HIGH</span>
+          <span class="v-status patched mono">PATCHED</span>
+          <span class="v-year mono">2023</span>
+        </li>
+        <li class="vuln">
+          <span class="v-id mono">CVE-2023-████</span>
+          <span class="v-target">Platform LMS universitas — authentication bypass</span>
+          <span class="v-sev sev-h">HIGH</span>
+          <span class="v-status patched mono">PATCHED</span>
+          <span class="v-year mono">2023</span>
+        </li>
+        <li class="vuln">
+          <span class="v-id mono">HOF-2022-014</span>
+          <span class="v-target">Marketplace e-commerce — chained XSS → SSRF ke metadata cloud</span>
+          <span class="v-sev sev-c">CRITICAL</span>
+          <span class="v-status mono">ACKNOWLEDGED</span>
+          <span class="v-year mono">2022</span>
+        </li>
+        <!-- ══════════ BATAS AKHIR BLOCK ENTRI ══════════ -->
+      </ul>
+    </div>
+
+    <!-- ── PANEL 2: SERTIFIKAT ── -->
+    <div class="panel" id="panel-cert" role="tabpanel" hidden>
+      <div class="cert-grid">
+        <!-- ══════════ TAMBAH SERTIFIKAT BARU: salin satu blok <article> ini ══════════ -->
+        <article class="cert-card">
+          <div class="cert-thumb">
+            <img src="https://picsum.photos/seed/cert-oscp/400/280" alt="Sertifikat OSCP">
+            <span class="cert-year">2024</span>
+          </div>
+          <div class="cert-info">
+            <h3>OSCP</h3>
+            <p class="cert-issuer">OffSec — Offensive Security Certified Professional</p>
+            <p class="cert-id mono">ID: OS-XXXXX-XXXXX</p>
+            <a class="cert-link mono" href="#" target="_blank" rel="noopener">VERIFIKASI ▸</a>
+          </div>
+        </article>
+        <article class="cert-card">
+          <div class="cert-thumb">
+            <img src="https://picsum.photos/seed/cert-crto/400/280" alt="Sertifikat CRTO">
+            <span class="cert-year">2024</span>
+          </div>
+          <div class="cert-info">
+            <h3>CRTO</h3>
+            <p class="cert-issuer">Zero-Points — Certified Red Team Operator</p>
+            <p class="cert-id mono">ID: CRTO-XXXX</p>
+            <a class="cert-link mono" href="#" target="_blank" rel="noopener">VERIFIKASI ▸</a>
+          </div>
+        </article>
+        <article class="cert-card">
+          <div class="cert-thumb">
+            <img src="https://picsum.photos/seed/cert-ecppt/400/280" alt="Sertifikat eCPPT">
+            <span class="cert-year">2023</span>
+          </div>
+          <div class="cert-info">
+            <h3>eCPPT</h3>
+            <p class="cert-issuer">INE Security — Certified Professional Penetration Tester</p>
+            <p class="cert-id mono">ID: ECPT-XXXXXX</p>
+            <a class="cert-link mono" href="#" target="_blank" rel="noopener">VERIFIKASI ▸</a>
+          </div>
+        </article>
+        <article class="cert-card">
+          <div class="cert-thumb">
+            <img src="https://picsum.photos/seed/cert-btl1/400/280" alt="Sertifikat BTL1">
+            <span class="cert-year">2023</span>
+          </div>
+          <div class="cert-info">
+            <h3>BTL1</h3>
+            <p class="cert-issuer">Security Blue Team — Blue Team Level 1</p>
+            <p class="cert-id mono">ID: BTL1-XXXXX</p>
+            <a class="cert-link mono" href="#" target="_blank" rel="noopener">VERIFIKASI ▸</a>
+          </div>
+        </article>
+        <article class="cert-card">
+          <div class="cert-thumb">
+            <img src="https://picsum.photos/seed/cert-secplus/400/280" alt="Sertifikat Security+">
+            <span class="cert-year">2022</span>
+          </div>
+          <div class="cert-info">
+            <h3>Security+</h3>
+            <p class="cert-issuer">CompTIA — Security+ Certification</p>
+            <p class="cert-id mono">ID: COMP-XXXXXXX</p>
+            <a class="cert-link mono" href="#" target="_blank" rel="noopener">VERIFIKASI ▸</a>
+          </div>
+        </article>
+        <!-- ══════════ BATAS AKHIR BLOCK ENTRI ══════════ -->
+      </div>
+    </div>
+
+    <!-- ── PANEL 3: SURAT PENGHARGAAN ── -->
+    <div class="panel" id="panel-letter" role="tabpanel" hidden>
+      <div class="letter-grid">
+        <!-- ══════════ TAMBAH SURAT BARU: salin satu blok <article> ini ══════════ -->
+        <article class="letter">
+          <header><span class="l-type mono">LETTER OF APPRECIATION</span><span class="l-year mono">2025</span></header>
+          <h3>Ditjen Aplikasi Informatika — Kementerian ███</h3>
+          <p class="l-quote">"…kontribusi signifikan dalam memperkuat postur keamanan infrastruktur layanan publik nasional melalui pengungkapan kerentanan yang bertanggung jawab…"</p>
+          <footer class="mono">— Kepala Divisi Keamanan Informasi</footer>
+          <span class="l-stamp">TERARSIP</span>
+        </article>
+        <article class="letter">
+          <header><span class="l-type mono">LETTER OF APPRECIATION</span><span class="l-year mono">2024</span></header>
+          <h3>Fakultas Informatika — Universitas ████</h3>
+          <p class="l-quote">"…apresiasi atas responsible disclosure celah pada platform akademik kami, serta kesediaan berbagi ilmu melalui kuliah tamu keamanan siber…"</p>
+          <footer class="mono">— Dekan Fakultas Informatika</footer>
+          <span class="l-stamp">TERARSIP</span>
+        </article>
+        <article class="letter">
+          <header><span class="l-type mono">LETTER OF APPRECIATION</span><span class="l-year mono">2023</span></header>
+          <h3>PT ████ Manufaktur — klien respons insiden</h3>
+          <p class="l-quote">"…dedikasi tim selama 40 jam kritis memungkinkan operasional kami pulih tanpa membayar tebusan. Profesionalisme tanpa tandingan…"</p>
+          <footer class="mono">— Direktur Operasional</footer>
+          <span class="l-stamp">TERARSIP</span>
+        </article>
+        <!-- ══════════ BATAS AKHIR BLOCK ENTRI ══════════ -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SEC.07 KANAL ============ -->
+<section id="kanal">
+  <div class="container kanal-grid">
+    <div class="kanal-left" data-reveal>
+      <span class="sec-no" style="display:block;margin-bottom:20px">SEC.07 //</span>
+      <h2>SIAP MENGUJI <em>PERTAHANANMU?</em></h2>
+      <p>Red team, pentest, audit, atau sekadar second opinion soal postur keamananmu. Kirim brief — saya balas dengan pertanyaan yang tepat, bukan template penawaran.</p>
+      <dl class="ch-list">
+        <div class="ch"><dt>EMAIL</dt><dd>mifzal@nugroho.sec.id</dd></div>
+        <div class="ch"><dt>GITHUB</dt><dd>github.com/mifzaleko</dd></div>
+        <div class="ch"><dt>LINKEDIN</dt><dd>in/mifzal-eko-nugroho</dd></div>
+        <div class="ch"><dt>TRYHACKME</dt><dd>thm/men_sys · top 1%</dd></div>
+        <div class="ch"><dt>PGP</dt><dd>0x9F3C A114 7BD2 06E8</dd></div>
+      </dl>
+    </div>
+    <div data-reveal style="--d:.15s">
+      <form class="term-form" id="contact-form">
+        <div class="term-bar"><i></i><i></i><i></i><span>kanal-aman — formulir terenkripsi</span></div>
+        <div class="term-body">
+          <div class="f-row"><label for="f-nama">&gt; IDENTITAS PENGIRIM</label><input id="f-nama" type="text" placeholder="nama / organisasi" required autocomplete="name"></div>
+          <div class="f-row"><label for="f-email">&gt; JALUR BALASAN</label><input id="f-email" type="email" placeholder="email@anda.id" required autocomplete="email"></div>
+          <div class="f-row"><label for="f-pesan">&gt; PAYLOAD PESAN</label><textarea id="f-pesan" rows="5" placeholder="ceritakan scope, target, dan timeline…" required></textarea></div>
+          <button class="btn" type="submit" id="send-btn">ENKRIPSI &amp; KIRIM ▸</button>
+          <p id="form-ok">&gt; payload diterima…<br>&gt; dienkripsi AES-256-GCM… OK<br>&gt; ditandatangani… OK<br>&gt; <b>TERKIRIM.</b> SLA respons &lt; 24 jam.</p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container foot">
+    <div>
+      <div class="fp">PGP: 9F3C A114 7BD2 06E8 55D0 &nbsp;02B1 4E77 90FF 3A2C</div>
+      <div>© 2026 <b>MIFZAL EKO NUGROHO</b> — YOGYAKARTA, ID</div>
+    </div>
+    <div>
+      <div>DITULIS &amp; DIKOMPILASI MANUAL. BUKAN TEMPLATE.</div>
+      <div>TEKAN <b>CTRL+U</b> — SEMUA TRIK TERBUKA DI SANA.</div>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="js/scene3d.js?v=2"></script>
+<script src="js/main.js?v=2"></script>
+</body>
+</html>
